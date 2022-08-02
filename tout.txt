@@ -1,0 +1,25 @@
+     23      23     255
+     23      23     255
+ft_split.c
+ft_split.o
+ft_splity.c
+ft_splity.o
+get_next_line.c
+get_next_line.o
+get_next_line_utils.c
+get_next_line_utils.o
+Makefile
+out.txt
+pipex
+pipex_bonus
+pipex_bonus.c
+pipex_bonus.o
+pipex.c
+pipex.h
+pipex.o
+test.txt
+tout.txt
+uti.c
+utils.c
+utils.o
+uti.o

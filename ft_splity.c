@@ -6,7 +6,7 @@
 /*   By: lkurdy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/17 22:12:56 by lkurdy            #+#    #+#             */
-/*   Updated: 2022/07/17 22:12:57 by lkurdy           ###   ########.fr       */
+/*   Updated: 2022/07/27 14:19:28 by lkurdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,13 @@ static int	size(const char *str, char set)
 	return (j);
 }
 
-char	**ft_free(char **dest, int j)
+char	**ft_free(char **dest)
 {
+	int	j;
+
+	j = 0;
+	while (dest[j])
+		j++;
 	while (j > 0)
 	{
 		j--;
@@ -86,7 +91,7 @@ char	**ft_splity(const char *s, char c)
 		{
 			dest[j] = malloc(sizeof(const char) * (i - g + 2));
 			if (!dest[j])
-				return (ft_free(dest, j));
+				return (ft_free(dest));
 			dest[j] = ft_cpy(dest[j], &s[g], i - g);
 			j++;
 		}

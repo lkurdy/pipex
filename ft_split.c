@@ -6,7 +6,7 @@
 /*   By: lkurdy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/17 22:15:45 by lkurdy            #+#    #+#             */
-/*   Updated: 2022/07/17 22:15:46 by lkurdy           ###   ########.fr       */
+/*   Updated: 2022/07/27 14:23:25 by lkurdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	**ft_split(const char *s, char c)
 		{
 			dest[j] = malloc(sizeof(const char) * (i - g + 1));
 			if (!dest[j])
-				return (ft_free(dest, j));
+				return (ft_free(dest));
 			dest[j] = ft_cpy(dest[j], &s[g], i - g);
 			j++;
 		}

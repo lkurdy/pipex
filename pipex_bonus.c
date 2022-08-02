@@ -6,7 +6,7 @@
 /*   By: lkurdy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/17 22:09:00 by lkurdy            #+#    #+#             */
-/*   Updated: 2022/07/17 22:19:17 by lkurdy           ###   ########.fr       */
+/*   Updated: 2022/07/27 14:40:48 by lkurdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ static char	**ft_parse(char **envp)
 	i = 0;
 	while (envp[i] && !ft_strnstr(envp[i], "PATH=", 5))
 		i++;
-	if (!envp[i])
-		exit(0);
 	s = &envp[i][5];
 	paths = ft_splity(s, ':');
 	return (paths);
@@ -33,27 +31,28 @@ void	exe(char *cmd, char **envp)
 	char	**paths;
 	char	**o;
 	int		j;
-	int		i;
 	char	*bin;
 
 	j = 0;
-	i = 0;
 	o = ft_split(cmd, ' ');
-	while (o[i])
-		i++;
-	paths = ft_parse(envp);
-	while (paths[j])
+	if (!envp[0])
+		execve(cmd, o, envp);
+	else
 	{
-		bin = ft_strjoin(paths[j], o[0]);
-		if (!bin)
-			break ;
-		execve(bin, o, envp);
-		free(bin);
-		j++;
+		paths = ft_parse(envp);
+		while (paths[j])
+		{
+			bin = ft_strjoin(paths[j], o[0]);
+			if (!bin)
+				break ;
+			execve(bin, o, envp);
+			free(bin);
+			j++;
+		}
 	}
-	ft_free(paths, j);
-	ft_free(o, i);
-	perror("Error: command not found");
+	ft_free(paths);
+	ft_free(o);
+	write(2, "Error: command not found\n", 25);
 }
 
 pid_t	pipex(int f1, char *argv, char **envp)
@@ -115,21 +114,23 @@ int	main(int argc, char **argv, char **envp)
 	int		i;
 	pid_t	process;
 
+	process = 1;
 	i = 3;
 	if (argc < 5)
 		return (write(2, "Invalid number of arguments\n", 28));
 	f2 = file(&f1, argv, argc, &i);
-	if (f1 < 0 || f2 < 0)
+	if (f2 < 0)
 		return (0);
-	dup2(f1, 0);
 	dup2(f2, 1);
-	process = pipex(f1, argv[i - 1], envp);
-	while (i < argc - 2 && process)
+	if (f1 < 0)
+		perror("Error");
+	else
 	{
-		process = pipex(1, argv[i], envp);
-		i++;
+		dup2(f1, 0);
+		process = pipex(f1, argv[i - 1], envp);
 	}
-	if (process)
-		exe(argv[i], envp);
+	while (i < argc - 2 && process)
+		process = pipex(1, argv[i++], envp);
+	op2(process, i, envp, argv);
 	return (0);
 }
